@@ -7,5 +7,9 @@
     "dev": "node src/server.js"
   },
   "author": "jabin",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
+  }
 }
