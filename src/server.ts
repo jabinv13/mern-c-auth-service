@@ -1,5 +1,5 @@
 function login(username: string) {
-  return true;
+    return true
 }
 
-login("jebin");
+login("jebin")
