@@ -84,6 +84,29 @@ describe("POST /auth/register", () => {
 
             expect(users).toHaveLength(1);
         });
+
+        it("should return an id of the created user ", async () => {
+            const userData = {
+                firstName: "Jabin",
+                lastName: "v",
+                email: "jabinv@mern.auth",
+                password: "secret",
+            };
+
+            //ACT
+
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            //assert
+            expect(response.body).toHaveProperty("id");
+            const repository = connection.getRepository(User);
+            const users = await repository.find();
+            expect((response.body as Record<string, string>).id).toBe(
+                users[0].id,
+            );
+        });
     });
 
     describe("Fields are missing", () => {});
