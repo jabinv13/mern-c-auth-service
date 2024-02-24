@@ -28,7 +28,7 @@ describe("POST /auth/register", () => {
     describe("Given all fields", () => {
         it("should return 201 status code", async () => {
             const userData = {
-                firstName: "Jabin",
+                firstName: "Jabin22",
                 lastName: "v",
                 email: "jain@mern.auth",
                 password: "secret",
@@ -111,7 +111,7 @@ describe("POST /auth/register", () => {
 
         it("should assign a customer role", async () => {
             const userData = {
-                firstName: "Jabin",
+                firstName: "Jabin77",
                 lastName: "v",
                 email: "jabinv@mern.auth",
                 password: "secret",
@@ -127,6 +127,52 @@ describe("POST /auth/register", () => {
 
             expect(users[0]).toHaveProperty("role");
             expect(users[0].role).toBe(Roles.CUSTOMER);
+        });
+
+        it("should store the hashed password in the database ", async () => {
+            const userData = {
+                firstName: "Jabin",
+                lastName: "v",
+                email: "jabinv2@mern.auth",
+                password: "secret",
+            };
+
+            //ACT
+
+            await request(app).post("/auth/register").send(userData);
+
+            // ASSERT
+
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+            expect(users[0].password).not.toBe(userData.password);
+            expect(users[0].password).toHaveLength(60);
+            expect(users[0].password).toMatch(/^\$2[a|b]\$\d+\$/);
+        });
+
+        it("should return 400 status code if email is already exist", async () => {
+            const userData = {
+                firstName: "Jabin",
+                lastName: "v",
+                email: "jabinv@mern001.auth",
+                password: "secret",
+            };
+
+            const userRepository = connection.getRepository(User);
+            await userRepository.save({ ...userData, role: Roles.CUSTOMER });
+
+            //ACT
+
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            const users = await userRepository.find();
+
+            //ASSERT
+
+            expect(response.statusCode).toBe(400);
+            expect(users).toHaveLength(1);
         });
     });
 
