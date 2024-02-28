@@ -23,9 +23,9 @@ describe("POST /auth/login", () => {
     describe("Given all field", () => {
         it("should return the access token and refresh token inside a cookie", async () => {
             const userData = {
-                firstName: "Rakesh",
-                lastName: "K",
-                email: "rakesh@mern.space",
+                firstName: "Jabin22",
+                lastName: "v",
+                email: "jain@mern.auth",
                 password: "password",
             };
 
