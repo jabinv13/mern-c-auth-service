@@ -180,6 +180,7 @@ export class AuthController {
     async refresh(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             //generate new access token //adding new refresh token to db
+
             const payload: JwtPayload = {
                 sub: req.auth.sub,
                 role: req.auth.role,
@@ -230,5 +231,22 @@ export class AuthController {
             return;
         }
         res.json();
+    }
+
+    async logout(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+            this.logger.info("Refresh token has been deleted", {
+                id: req.auth.id,
+            });
+            this.logger.info("User has been logged out", { id: req.auth.sub });
+
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
+            res.json({});
+        } catch (err) {
+            next(err);
+            return;
+        }
     }
 }

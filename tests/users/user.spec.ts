@@ -31,7 +31,7 @@ describe("GET /auth/self", () => {
     describe("Given all field", () => {
         it("should return the 200 status code", async () => {
             const accessToken = jwks.token({
-                sub: "1",
+                sub: "44",
                 role: Roles.CUSTOMER,
             });
             const response = await request(app)

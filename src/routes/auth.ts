@@ -13,6 +13,7 @@ import { CredentialService } from "../services/CredentialService";
 import authenticate from "../middleware/authenticate";
 import { AuthRequest } from "../types";
 import validateRefreshToken from "../middleware/validateRefreshToken";
+import parseRefreshToken from "../middleware/parseRefreshToken";
 
 const router = express.Router();
 
@@ -51,6 +52,13 @@ router.post(
     validateRefreshToken,
     (req: Request, res: Response, next: NextFunction) =>
         authController.refresh(req as AuthRequest, res, next),
+);
+
+router.post(
+    "/logout",
+    parseRefreshToken,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.logout(req as AuthRequest, res, next),
 );
 
 export default router;
